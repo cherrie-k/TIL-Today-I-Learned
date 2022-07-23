@@ -1,0 +1,69 @@
+# 2.1~2.3 코드 이해하기, JSX 서론
+
+### 리액트의 default App.js는 다음과 같다.
+
+```jsx
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+```
+
+첫 줄의 import는 다른 파일들을 불러와 사용하게 해줌. 이는 원래 브라우저는 할 수 없는건데, 브라우저가 아닌 환경에서 자바스크립트를 실행할 수 있게 해 주는 환경인 **Node.js** 에서 지원해주는 기능.
+
+<aside>
+✏️ Bundling
+
+- import(또는 require)를 통해 불러온 모듈을 묶어서 하나의 파일 생성해줌. 최적화 과정에서 여러 개 파일로 분리 가능. bundler가 수행.
+- bundler 예시: 웹팩, Parcel, browserify…
+- 웹팩의 loader가 파일들을 불러오는 기능을 함. SVG(웹 친화적 벡터 파일 포맷)와 CSS 파일도 불러와서 사용.
+    - 예) babel-loader는 자바스크립트 파일들을 불러오면서 최신 js 문법으로 작성된 코드를 바벨이라는 도구를 사용해서 ES5 문법으로 변환해줌. 이는 최신 문법 실행이 불가한 구버전 웹 브라우저와 호환하기 위해서..
+</aside>
+
+이후 function App() {...} 에서는 App라는 함수 컴포넌트를 만들어 줌. 함수에서 반환하는 내용은 HTML처럼 보이지만, 사실은 “JSX”임. 
+
+---
+
+### JSX란?
+
+UI 렌더링을 편하게 해주는 자바스크립트의 확장 문법. 공식적인 자바스크립트 문법은 아님.
+
+코드가 번들링되는 과정에서 바벨을 사용하여 일반 자바스크립트 형태의 코드로 변환. 
+
+### JSX의 장점
+
+1. 보기 쉽고 익숙함
+2. 활용도가 높음
+    - 이미 친숙한 HTML 태그 사용 가능
+    - JSX 안에서 컴포넌트를 쉽게 작성 가능
+
+<aside>
+✏️ ReactDOM.render:
+
+- 컴포넌트를 페이지에 렌더링하는 역할.
+- import(또는 require)를 통해 불러온 모듈을 묶어서 하나의 파일 생성해줌. 최적화 과정에서 여러 개 파일로 분리 가능. bundler가 수행.
+- bundler 예시: 웹팩, Parcel, browserify…
+- 웹팩의 loader가 파일들을 불러오는 기능을 함. SVG(웹 친화적 벡터 파일 포맷)와 CSS 파일도 불러와서 사용.
+    - 예) babel-loader는 자바스크립트 파일들을 불러오면서 최신 js 문법으로 작성된 코드를 바벨이라는 도구를 사용해서 ES5 문법으로 변환해줌. 이는 최신 문법 실행이 불가한 구버전 웹 브라우저와 호환하기 위해서..
+</aside>
