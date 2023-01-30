@@ -1,0 +1,55 @@
+<html>
+  <body>
+    <style>
+      .container {
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id="gold"></div>
+    <div id="plum"></div>
+    <div id="olive"></div>
+
+    <script>
+      function gold() {
+        document.querySelector("#gold").innerHTML = `
+        <div class="container" id="component_red">
+            <h1>gold</h1>
+            <input type="button" value="fire" onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'gold';
+            document.querySelector('#component_plum').style.backgroundColor = 'gold';
+            document.querySelector('#component_blue').style.backgroundColor = 'gold';
+            ">
+        </div>
+    `;
+      }
+      gold();
+      function plum() {
+        document.querySelector("#plum").innerHTML = `
+        <div class="container" id="component_plum">
+            <h1>plum</h1>
+            <input type="button" value="fire" onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'plum';
+            document.querySelector('#component_plum').style.backgroundColor = 'plum';
+            document.querySelector('#component_blue').style.backgroundColor = 'plum';
+            ">
+        </div>
+    `;
+      }
+      plum();
+      function olive() {
+        document.querySelector("#olive").innerHTML = `
+        <div class="container" id="component_blue">
+            <h1>olive</h1>
+            <input type="button" value="fire" onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'olive';
+            document.querySelector('#component_plum').style.backgroundColor = 'olive';
+            document.querySelector('#component_blue').style.backgroundColor = 'olive';
+            ">
+        </div>
+    `;
+      }
+      olive();
+    </script>
+  </body>
+</html>
