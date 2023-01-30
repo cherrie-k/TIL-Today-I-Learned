@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.1/redux.js"></script>
+  </head>
+  <body>
+    <style>
+      .container {
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id="gold"></div>
+
+    <script>
+      // store을 생성 할 때 반드시 넣어줘야 하는 reducer. 두 개의 parameter를 받음
+      function reducer(state, action) {
+        if (state === undefined) {
+          // state 초기화 단계
+          return { color: "yellow" };
+        }
+      }
+
+      //store 생성
+      var store = Redux.createStore(reducer);
+      console.log(store.getState());
+
+      function gold() {
+        document.querySelector("#gold").innerHTML = `
+        <div class="container" id="component_red">
+            <h1>gold</h1>
+            <input type="button" value="fire" onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'gold';
+            document.querySelector('#component_plum').style.backgroundColor = 'gold';
+            document.querySelector('#component_blue').style.backgroundColor = 'gold';
+            ">
+        </div>
+    `;
+      }
+      gold();
+    </script>
+  </body>
+</html>
