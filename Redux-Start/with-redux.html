@@ -13,11 +13,19 @@
 
     <script>
       // store을 생성 할 때 반드시 넣어줘야 하는 reducer. 두 개의 parameter를 받음
+      // reducer는 이전 state 값과 action을 받아서 새로운 state 값을 리턴해줌으로써 state 값을 수정한다.
       function reducer(state, action) {
         if (state === undefined) {
           // state 초기화 단계
-          return { color: "yellow" };
+          return { color: "lightcyan" };
         }
+        var newState;
+        if (action.type === "CHANGE_COLOR") {
+          // 첫번째 인자로 {빈 객체}를 주면 state의 property들이 빈 객체에 복제돼서 그것이 리턴됨. 그 후 세번째 인자가 리턴된 새 state에 적용.
+          newState = Object.assign({}, state, { color: "gold" });
+        }
+        // 각각의 state 값을 분리해야 추후 유지보수에 유리
+        return newState;
       }
 
       //store 생성
@@ -29,9 +37,7 @@
         <div class="container" id="component_red">
             <h1>gold</h1>
             <input type="button" value="fire" onclick="
-            document.querySelector('#component_red').style.backgroundColor = 'gold';
-            document.querySelector('#component_plum').style.backgroundColor = 'gold';
-            document.querySelector('#component_blue').style.backgroundColor = 'gold';
+                store.dispatch({type:'CHANGE_COLOR', color: 'gold'})
             ">
         </div>
     `;
