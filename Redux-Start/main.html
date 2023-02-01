@@ -52,18 +52,17 @@
       function control() {
         document.querySelector("#control").innerHTML = `
         <ul>
-            <li><a onclick="
-                event.preventDefault();
+            <li><input onclick="
                 store.dispatch({
                   type: 'CHANGE_MODE',
                   mode: 'create'
-                })
-            " href="/create">create</a></li>
+                });
+            " type = "button" value = "create"></li>
             <li><input onClick="
                 store.dispatch({
                   type: 'DELETE',
                 });
-            " type="button" value="delete"></li>
+            " type = "button" value = "delete"></li>
         </ul>
         `;
       }
@@ -203,7 +202,9 @@
         return newState;
       }
 
+      // single source of truth
       var store = Redux.createStore(reducer);
+      // state 변경될때마다 article과 TOC에게 알려서 UI 업데이트
       store.subscribe(article);
       store.subscribe(TOC);
 
