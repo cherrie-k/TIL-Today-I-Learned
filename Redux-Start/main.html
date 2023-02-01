@@ -48,6 +48,7 @@
       `;
       }
 
+      // 여기서 create랑 delete 버튼 띄워줌
       function control() {
         document.querySelector("#control").innerHTML = `
         <ul>
@@ -67,9 +68,11 @@
         `;
       }
 
+      // 세 가지 모드, create, read와 welcome 있음.
       function article() {
-        // 두 가지 모드, create와 read가 있음.
         var state = store.getState();
+
+        // control()에서 create 눌렀을 때 생기는 일
         if (state.mode === "create") {
           document.querySelector("#content").innerHTML = `
             <article>
@@ -95,7 +98,10 @@
                 </form>
             </article>
             `;
-        } else if (state.mode === "read") {
+        }
+
+        // action type이 select 일 때 read 모드가 실행됨.
+        else if (state.mode === "read") {
           var i = 0;
           var aTitle, aDesc;
           while (i < state.contents.length) {
@@ -112,7 +118,10 @@
                 ${aDesc}
             </article>
             `;
-        } else if (state.mode === "welcome") {
+        }
+
+        // 처음 띄울 때 state이 undefined 일 때 welcome 모드가 실행됨.
+        else if (state.mode === "welcome") {
           document.querySelector("#content").innerHTML = `
             <article>
                 <h2>Welcome</h2>
@@ -123,8 +132,8 @@
       }
 
       function reducer(state, action) {
+        // 초기값 세팅. 아무런 일도 일어나지 않았을 때..
         if (state === undefined) {
-          // 초기값 세팅
           return {
             // 기본값
             max_id: 3,
@@ -139,7 +148,9 @@
           };
         }
 
+        // 수정되는 state들이 서로 독립적으로 존재 할 수 있도록 newState를 매번 만들어줌ㄴ
         var newState;
+
         // select action이 주어질 때
         if (action.type === "SELECT") {
           // 빈 객체에 state 복제 후 이후 parameter 적용하고 newState 리턴
