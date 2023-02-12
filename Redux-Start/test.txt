@@ -1,0 +1,4 @@
+Testing git Settings - sparse checkout
+Testing again . . . 
+Testing again . . . 3
+
