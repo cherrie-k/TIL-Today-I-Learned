@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.1/redux.js"></script>
+  </head>
+  <body>
+    <style>
+      .container {
+        border: 5px solid black;
+        padding: 10px;
+      }
+    </style>
+    <div id="gold"></div>
+    <div id="plum"></div>
+    <div id="olive"></div>
+
+    <script>
+      // store을 생성 할 때 반드시 넣어줘야 하는 reducer. 두 개의 parameter를 받음
+      // reducer는 이전 state 값과 action을 받아서 새로운 state 값을 리턴해줌으로써 state 값을 수정한다.
+      function reducer(state, action) {
+        if (state === undefined) {
+          // state 초기화 단계
+          return { color: "lightcyan" };
+        }
+        var newState;
+        if (action.type === "CHANGE_COLOR") {
+          // 첫번째 인자로 {빈 객체}를 주면 state의 property들이 빈 객체에 복제돼서 그것이 리턴됨. 그 후 세번째 인자가 리턴된 새 state에 적용.
+          newState = Object.assign({}, state, { color: action.color });
+        }
+        // 각각의 state 값을 분리해야 추후 유지보수에 유리
+        return newState;
+      }
+
+      //store 생성
+      var store = Redux.createStore(reducer);
+
+      // dispatch 할 때마다 gold()를 호출하게 하려면, subscribe 해주면 됨.
+      function gold() {
+        var state = store.getState();
+        document.querySelector("#gold").innerHTML = `
+        <div class="container" id="component_gold" style="background-color:${state.color}">
+            <h1>gold</h1>
+            <input type="button" value="fire" onclick="
+                store.dispatch({type:'CHANGE_COLOR', color: 'gold'})
+            ">
+        </div>
+    `;
+      }
+      // state이 바뀔 때 마다 반영이 됨.
+      store.subscribe(gold);
+      gold();
+
+      function plum() {
+        var state = store.getState();
+        document.querySelector("#plum").innerHTML = `
+        <div class="container" id="component_plum" style="background-color:${state.color}">
+            <h1>plum</h1>
+            <input type="button" value="fire" onclick="
+                store.dispatch({type:'CHANGE_COLOR', color: 'plum'})
+            ">
+        </div>
+    `;
+      }
+      store.subscribe(plum);
+      plum();
+
+      // redux가 없을 때는 component끼리의 의존성이 강하고, 어떤 컴포넌트를 추가/삭제 할 때 다른 컴포넌트들에서도 일일히 그걸 고려해서 작업해줘야 하는데, redux를 사용하면 그럴 필요가 없음
+      // 중앙집중적 관리 가능. 이 olive 컴포넌트는 gold, plum 컴포넌트에 대해 알고 있을 필요 X.
+      function olive() {
+        var state = store.getState();
+        document.querySelector("#olive").innerHTML = `
+        <div class="container" id="component_olive" style="background-color:${state.color}">
+            <h1>olive</h1>
+            <input type="button" value="fire" onclick="
+                store.dispatch({type:'CHANGE_COLOR', color: 'olive'})
+            ">
+        </div>
+    `;
+      }
+      store.subscribe(olive);
+      olive();
+    </script>
+  </body>
+</html>

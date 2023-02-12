@@ -6,50 +6,50 @@
         padding: 10px;
       }
     </style>
-    <div id="lemonchiffon"></div>
-    <div id="aquamarine"></div>
+    <div id="gold"></div>
     <div id="plum"></div>
+    <div id="olive"></div>
 
     <script>
-      function lemonchiffon() {
-        document.querySelector("#lemonchiffon").innerHTML = `
-        <div class="container" id="component_lemonchiffon">
-            <h1>Lemon Chiffon</h1>
+      function gold() {
+        document.querySelector("#gold").innerHTML = `
+        <div class="container" id="component_red">
+            <h1>gold</h1>
             <input type="button" value="fire" onclick="
-            document.querySelector('#component_lemonchiffon').style.backgroundColor = 'lemonchiffon';
-            document.querySelector('#component_aquamarine').style.backgroundColor = 'lemonchiffon';
-            document.querySelector('#component_blue').style.backgroundColor = 'lemonchiffon';
+            document.querySelector('#component_red').style.backgroundColor = 'gold';
+            document.querySelector('#component_plum').style.backgroundColor = 'gold';
+            document.querySelector('#component_blue').style.backgroundColor = 'gold';
             ">
         </div>
     `;
       }
-      lemonchiffon();
-      function aquamarine() {
-        document.querySelector("#aquamarine").innerHTML = `
-        <div class="container" id="component_aquamarine">
-            <h1>aquamarine</h1>
-            <input type="button" value="fire" onclick="
-            document.querySelector('#component_lemonchiffon').style.backgroundColor = 'aquamarine';
-            document.querySelector('#component_aquamarine').style.backgroundColor = 'aquamarine';
-            document.querySelector('#component_blue').style.backgroundColor = 'aquamarine';
-            ">
-        </div>
-    `;
-      }
-      aquamarine();
+      gold();
       function plum() {
         document.querySelector("#plum").innerHTML = `
-        <div class="container" id="component_blue">
-            <h1>Plum</h1>
+        <div class="container" id="component_plum">
+            <h1>plum</h1>
             <input type="button" value="fire" onclick="
-            document.querySelector('#component_lemonchiffon').style.backgroundColor = 'plum';
-            document.querySelector('#component_aquamarine').style.backgroundColor = 'plum';
+            document.querySelector('#component_red').style.backgroundColor = 'plum';
+            document.querySelector('#component_plum').style.backgroundColor = 'plum';
             document.querySelector('#component_blue').style.backgroundColor = 'plum';
             ">
         </div>
     `;
       }
       plum();
+      function olive() {
+        document.querySelector("#olive").innerHTML = `
+        <div class="container" id="component_blue">
+            <h1>olive</h1>
+            <input type="button" value="fire" onclick="
+            document.querySelector('#component_red').style.backgroundColor = 'olive';
+            document.querySelector('#component_plum').style.backgroundColor = 'olive';
+            document.querySelector('#component_blue').style.backgroundColor = 'olive';
+            ">
+        </div>
+    `;
+      }
+      olive();
     </script>
   </body>
 </html>
