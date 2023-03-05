@@ -105,9 +105,7 @@ Compact form 에서 . 에 의해 **Header, Payload, Signature** 로 구분돼있
     </aside>
     
 
-JWT 인코딩 / 디코딩 해보기
-
-[JWT.IO](https://jwt.io/)
+JWT 인코딩 / 디코딩 해보기)  [JWT.IO](https://jwt.io/)
 
 ### JSON Web Token은 어떻게 동작할까?
 
@@ -127,9 +125,7 @@ JWT 인코딩 / 디코딩 해보기
     - 인증이 통과되었으므로 페이로드에 있는 유저의 정보를 select해서 클라이언트에 돌려줌
 3. 클라이언트가 서버에 요청을 했는데 만약 access tokeb 시간이 말료되면 클라이언트는 refresh token을 이용해서 서버로부터 새로운 액세스 토큰 발급받음. 
 
-![[https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)](JWT%20(1)%20d105426efdd1436e8ea18d88ffae6d72/Untitled.png)
-
-[https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)
+![diagram](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)
 
 1. 응용 프로그램 또는 클라이언트가 권한 부여 서버에 권한 부여를 요청. 이 작업은 서로 다른 권한 부여 흐름 중 하나를 통해 수행됨. 예를 들어, 일반적인 경우ID Connect 호환 웹 응용 프로그램은 인증 코드 흐름을 사용하여 /oauth/authendpoint를 통과함.
 2. 권한이 부여되면 권한 부여 서버는 응용프로그램에 대한 액세스 토큰을 반환함.
