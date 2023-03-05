@@ -98,10 +98,7 @@ Compact form 에서 . 에 의해 **Header, Payload, Signature** 로 구분돼있
 - 결과적으로 저 셋을 합쳐서 이런 형태의 JWT가 만들어진다!
     
     <aside>
-    💡 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
-    eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
-    SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-    
+    ![JWT example](https://cdn.auth0.com/content/jwt/encoded-jwt3.png)
     </aside>
     
 
