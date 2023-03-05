@@ -1,0 +1,172 @@
+# JWT (1)
+
+---
+
+### Cookie / Session / Token 인증 방식
+
+- ****************************Cookie 인증****************************
+    - 쿠키는 Key-Value 형식의 문자열 덩어리.
+    - 사이트 서버를 통해 클라이언트의 브라우저에 설치되는 작은 기록 정보 파일. 사용자마다 브라우저에 정보를 저장하니 고유 정보 식별 가능.
+    - **방식**
+        1. 브라우저(클라이언트)가 서버에 요청(접속) 보냄
+        2. 서버는 클라이언트 요청에 응답 할 때 응답 헤더의 Set-Cookie에 클라이언트 측에 저장하고 싶은 정보를 담아 보냄
+        3. 이후 클라이언트는 요청 보낼 때마다 저장된 쿠키를 요청 헤더의 Cookie에 담아 보냄
+        4. 서버는 쿠키에 담긴 정보를 바탕으로 해당 클라이언트 식별
+    - 단점
+        - 보안에 취약, 용량 제한 있음, 브라우저간 공유 불가능, 쿠키 사이즈 커지면 네트워크 부하 있음
+- ******Session 인증******
+    - 쿠키의 보안 이슈 때문에 세션은 비밀번호 등 클라이언트의 민감한 인증 정보를 브라우저가 아닌 서버 측(서버의 메모리나 로컬 파일, 데이터베이스 등)에 저장하고 관리함
+    - 세션 객체는 Key에 해당하는 SESSION ID와 이에 대응하는 Value로 구성.
+        - Value엔 세션 생성 시간, 마지막 접근 시간 및 User가 저장한 속성 등이 Map 형태로 저장
+    - **방식**
+        1. 유저가 로그인하면 세션이 서버 메모리(or DB)에 저장. 세션 식별 위해 Session Id 기준으로 정보 저장.
+        2. 서버에서 브라우저 쿠키에다가 Session Id 저장
+        3. 쿠키에 정보가 담겨있으니 브라우저는 해당 사이트에 대한 모든 Request에 Session Id를 쿠키에 담아 전송
+        4. 서버는 클라이언트가 보낸 Session Id와 서버 메모리로 관리하고 있는 Session Id를 비교하여 인증 수행
+    - 단점
+        - 해커가 세션 ID 자체를 탈튀하여 클라이언트인척 위장 가능
+        - 서버에서 세션 저장소를 사용하므로 요청이 많아지면 서버 부하 심해짐
+- **************************Token 인증**************************
+    - 클라이언트가 서버에 접속하면 서버에서 해당 클라이언트에게 인증되었다는 의미로 토큰 부여.
+        - 토큰은 유일하다
+    - 토큰을 발급받은 클라이언트는 또 다시 서버에 요청을 보낼 때 요청 헤더에 토큰을 심어서 보냄. 그러면 서버에선 클라이이언트로부터 받은 토큰을 서버에서 제공한 토큰과의 일치 여부를 체크하여 인증 과정 처리.
+    - 토큰은 세션과 달리 클라이언트 저장이라서 서버 부담 덜 수 있음.
+    - ********방식********
+        1. 사용자가 아이디와 비밀번호로 로그인 함
+        2. 서버 측에서 사용자(클라이언트)에게 유일한 토큰 발급
+        3. 클라이언트는 서버에서 전달받은 토큰을 쿠키나 스토리지에 저장하고, 서버에 요청 할때마다 해당 토큰을 서버 HTTP 요청 헤더에 포함시켜 전달
+        4. 서버는 전달받은 토큰을 검증하고 요청에 응답. 토큰에 요청자의 정보가 있기에 서버는 DB 조회하지 않아도 누가 요청하는지 알 수 있음
+    - 단점
+        - 쿠키/세션과 다르게 토큰 자체의 데이터 길이가 길다. 인증 요청 많아질수록 네트워크 부하 심해질수도..
+        - Payload 자체는 암호화 안돼서 유저의 중요한 정보를 담을 순 없음
+        - 토큰 탈취시 대처 어려움 (사용기간 제한하는 식으로 극복)
+
+### **JSON Web Token(JWT)**란?
+
+- 인증에 필요한 정보들을 암호화시킨 JSON 토큰. JWT 토큰을 HTTP 헤더에 실어서 서버가 클라이언트를 식별하는 방식.
+- 두 파티간 안전하게 정보 교류할 수 있게 해주는 open standard([RFC 7519](https://www.rfc-editor.org/rfc/rfc7519))
+- HMAC 알고리즘을 통한 secret key나 RSA||ECDSA를 통한 public/private key를 통해 사인 가능
+
+### JSON Web Token을 언제 써야할까?
+
+- **Autorization 할 때**
+    - 가장 흔한 경우.
+    - 사용자가 로그인 했으면 그 후 request는 JWT를 포함해서 허용된 routes, services, resources 등에 접근 가능
+    - Single Sign On 프로젝트
+- **Information Exchange 할 때**
+    - 파티 간 안전한 정보 교환을 위할 때
+    - public/private를 이용해서 JWT에 사인 하기에 받는 사람이 본인이 진짜 원하는 사람인지 확인 가능.
+    - 헤더와 페이로드를 사용하여 서명 계산 → 내용 변조 확인 가능
+
+### JSON Web Token의 구조
+
+Compact form 에서 . 에 의해 **Header, Payload, Signature** 로 구분돼있다. 
+
+- Header:
+    - 타입(JWT)과사용하는 해시 알고리즘(HMAC SHA256 or RSA)으로 구성.
+- Payload
+    - 요구사항(Claims)을 지니는 부분. 서버에서 첨부한 사용자 권한 정보와 데이터 담겨있음.
+        - Claims는 어떠한 entity(특히 유저)에 대한 statement나 추가 데이터이다.
+    - claim의 타입: **************************registered, public, private**************************
+        - Registered Claim: 필수적인건 아닌데 권장됨. iss(issuer/발행인), exp(expiration time/만료시간), sub(subject/주제), aud(audience/관객), iat(issued At/발행시간), jti(JWI ID) 등이 있음. Claim의 이름은 3글자!
+        - Public Claim: 사용자가 정의할 수 있는 클레임 공개용 정보 전달 위해 사용.  JWT 사용하는 사람 마음대로 정의. 충돌 방지를 위해 IANA JSON Web Token Registry 안에 정의하거나 충돌 방지 네임스페이스를 지닌 URI로 정의.
+        - Private Claim: 상호동의한 당사자(파티) 간에 정보를 공유하기 위해 만들어진 커스텀 클레임. 외부에 공개되도 상관없지만 해당 유저를 특정할 수 있는 정보를 담음.
+    - Payload 예시
+        
+        ```jsx
+        {
+          "sub": "1234567890",
+          "name": "John Doe",
+          "admin": true
+        }
+        ```
+        
+- Signature
+    - 헤더, 페이로드를 Base64 URL-safe Encode를 한 후 헤더에 명시된 해시함수를 적용하고 개인키(private key)로 서명한 전자서명 내포
+    - Signature를 만드려면 인코딩된 헤더, 인코딩된 페이로드, secret(암호), 그리고 헤더에 명시된 알고리즘을 가져와서 싸인해야 함.
+    - 이런 식으로!
+        
+        ```jsx
+        // HMAC SHA256 알고리즘을 사용하고 싶을때 이처럼 사용함
+        HMACSHA256(
+        base64UrlEncode(header) + "." +
+        base64UrlEncode(payload),
+        secret)
+        ```
+        
+    - Signature은 메시지가 도중에 변경 안됐다는걸 검증하기 위해 사용하고, private key로 사인된 토큰의 경우 JWT의 발신자가 명시된 발신자가 맞는지 확인하기 위해서도 사용됨!
+- 결과적으로 저 셋을 합쳐서 이런 형태의 JWT가 만들어진다!
+    
+    <aside>
+    💡 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+    eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
+    SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    
+    </aside>
+    
+
+JWT 인코딩 / 디코딩 해보기
+
+[JWT.IO](https://jwt.io/)
+
+### JSON Web Token은 어떻게 동작할까?
+
+1. 사용자가 id, pw 입력하여 서버에 로그인 인증 요청
+2. 인증 요청을 받은 서버는 header, payload, signature 정의. 이를 각각 Base64로 암호화해서 JWT 생성하고 쿠키에 담아 클라이언트에게 반환
+    - token ‘자격 증명’이므로 보안에 유의하여 조심히 다뤄야하고 너무 긴 시간동안 보관하면 안된다.
+3. 클라이언트는 서버로부터 받은 JWT를 로컬 스토리지(혹은 쿠키 등)에 저장
+- 유저가 API를 서버에 요청하여 보호된 route나 리소스에 접근하고 싶어하는 경우, 보통 Authorization header(bearer schema 사용)에 access token을 담아서 JWT를 전송함.
+    - 헤더 내용은 이런식으로
+        
+        ```json
+        Authorization: Bearer <token>
+        ```
+        
+1. 서버는 보호된 route는 authorizatino header에서 클라이언트가 헤더에 담아서 보낸 JWT가 내 서버에서 발행한, 유효한 토큰인지 일치 여부 확인.
+2. 유효하면 인증 통과시켜줘서 보호된 리소스에 접근 가능하게 해주고, 아니면 통과 실패!
+    - 인증이 통과되었으므로 페이로드에 있는 유저의 정보를 select해서 클라이언트에 돌려줌
+3. 클라이언트가 서버에 요청을 했는데 만약 access tokeb 시간이 말료되면 클라이언트는 refresh token을 이용해서 서버로부터 새로운 액세스 토큰 발급받음. 
+
+![[https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)](JWT%20(1)%20d105426efdd1436e8ea18d88ffae6d72/Untitled.png)
+
+[https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png](https://cdn2.auth0.com/docs/media/articles/api-auth/client-credentials-grant.png)
+
+1. 응용 프로그램 또는 클라이언트가 권한 부여 서버에 권한 부여를 요청. 이 작업은 서로 다른 권한 부여 흐름 중 하나를 통해 수행됨. 예를 들어, 일반적인 경우ID Connect 호환 웹 응용 프로그램은 인증 코드 흐름을 사용하여 /oauth/authendpoint를 통과함.
+2. 권한이 부여되면 권한 부여 서버는 응용프로그램에 대한 액세스 토큰을 반환함.
+3. 응용 프로그램은 액세스 토큰을 사용하여 보호된 리소스(예: API)에 액세스.
+
+### JSON Web Token을 왜 써야할까?
+
+**********장점:**********
+
+- Header와 Payload를 가지고 Signature를 생성하므로 데이터 위변조 감지 가능.
+- 인증 정보에 대한 별도 저장소 필요 X
+- JWT 내에 토큰 기본 정보, 전달할 정보, 토큰의 유효성을 증명하는 서명 등 필요한걸 자체적으로 지님.
+    - 따라서 클라이언트 인증 정보를 저장하지 않아도 되기 때문에 서버가 무상태(stateless)가 되어 서버 확장성 우수.
+- 토큰 기반으로 다른 로그인 시스템에 접근 및 권한 공유 가능. (쿠키는 안됨)
+- XML보다 심플하고 인코딩시 크기도 더 작음. 따라서 SAML보다 더 콤팩트.
+- JSON parser는 오브젝트에 바로 매핑이 되기 때문에 대부분의 프로그래밍 언어에서 사용 가능. XML에선 이게 불가해서 SAML보다 JWT로 작업이 더 쉬움
+- JWT는 인터넷 규모로 사용. 따라서 모바일 등 여러 플랫폼에서 웹 토큰의 client-side 프로세싱 쉬움. (모바일은 세션 사용 불가능)
+
+********단점:********
+
+- self-contained.토큰 자체에 정보가 많이 담겨있음
+- 정보 많아질수록 토큰 길이 길어남(payload쪽) → 네트워크에 부하
+- payload 자체가 암호화된게 아니라 그저 BASE64로 인코딩 된 것이기 때문에 중간에 Payload 탈취하여 디코딩하면 다른 사람들도 데이터 볼 수 있음. 따라서 payload에 중요 데이터 넣으면 안됨.
+- stateless한 특징을 지녀서 토큰은 클라이언트 측에서 관리하고 저장하는데, 따라서 토큰 자체를 탈취당하면 대처하기가 어려움
+
+### JWT의 Access Token과 Refresh Token
+
+토큰 탈취의 위험성에 대비해서, JWT를 그대로 사용하지 않고 Access token과 refresh token으로 나눈다. 
+
+둘 다 JWT이고, 토큰이 어디에 저장되고 관리되느냐의 차이만 있음. 
+
+- ********Access Token********
+    - 클라이언트가 갖고있는 실제로 유저의 정보가 담긴 토큰
+    - 클라이언트에서 요청이 오면 서버에서 해당 토큰에 있는 정보를 활용하여 사용자 정보에 맞게 응답 진행
+- **************************Refresh Token**************************
+    - 새로운 Access Token을 발급해주기 위해 사용하는 토큰
+    - 짧은 수명을 가지는 Access Token에게 새로운 토큰 발급해주기 위해 사용
+    - 보통 DB에 유저 정보와 같이 기록.
+
+전자는 접근에 관여, 후자는 재발급에 관여.
