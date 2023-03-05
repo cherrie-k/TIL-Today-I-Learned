@@ -96,13 +96,12 @@ Compact form 에서 . 에 의해 **Header, Payload, Signature** 로 구분돼있
         
     - Signature은 메시지가 도중에 변경 안됐다는걸 검증하기 위해 사용하고, private key로 사인된 토큰의 경우 JWT의 발신자가 명시된 발신자가 맞는지 확인하기 위해서도 사용됨!
 - 결과적으로 저 셋을 합쳐서 이런 형태의 JWT가 만들어진다!
+![JWT example](https://cdn.auth0.com/content/jwt/encoded-jwt3.png)
     
-    <aside>
-    ![JWT example](https://cdn.auth0.com/content/jwt/encoded-jwt3.png)
-    </aside>
     
 
 JWT 인코딩 / 디코딩 해보기)  [JWT.IO](https://jwt.io/)
+
 
 ### JSON Web Token은 어떻게 동작할까?
 
